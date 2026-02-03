@@ -1,0 +1,19 @@
+{
+  "name": "credit-card-payment-planner",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev:web": "pnpm --filter @ccpp/web dev",
+    "build:web": "pnpm --filter @ccpp/web build",
+    "lint": "pnpm --filter @ccpp/web lint",
+    "typecheck": "pnpm --filter @ccpp/web typecheck",
+    "test": "pnpm --filter @ccpp/web test"
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "@swc/core",
+      "esbuild"
+    ]
+  }
+}
