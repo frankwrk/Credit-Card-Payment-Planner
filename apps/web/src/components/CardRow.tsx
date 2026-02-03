@@ -1,7 +1,6 @@
 import { CreditCard } from "../types/card";
 import { UtilizationBar } from "./UtilizationBar";
 import { PaymentRecommendation } from "./PaymentRecommendation";
-import { CheckCircle2 } from "lucide-react";
 
 interface CardRowProps {
   card: CreditCard;

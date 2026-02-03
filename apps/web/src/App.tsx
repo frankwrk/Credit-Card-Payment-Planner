@@ -122,18 +122,20 @@ export default function App() {
           <AddCardScreen onBack={handleBackToCards} onSave={handleAddCard} />
         );
       case "cardDetail":
-        const selectedCard = cards.find((c) => c.id === selectedCardId);
-        if (!selectedCard) return null;
-        return (
-          <CardDetailScreen
-            card={selectedCard}
-            onBack={
-              activeTab === "cards" ? handleBackToCards : handleBackToHome
-            }
-            onSave={handleSaveCard}
-            onDeleteCard={handleDeleteCard}
-          />
-        );
+        {
+          const selectedCard = cards.find((c) => c.id === selectedCardId);
+          if (!selectedCard) return null;
+          return (
+            <CardDetailScreen
+              card={selectedCard}
+              onBack={
+                activeTab === "cards" ? handleBackToCards : handleBackToHome
+              }
+              onSave={handleSaveCard}
+              onDeleteCard={handleDeleteCard}
+            />
+          );
+        }
       case "explanation":
         return (
           <ExplanationScreen

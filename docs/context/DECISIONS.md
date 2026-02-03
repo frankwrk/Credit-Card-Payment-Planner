@@ -29,6 +29,7 @@
 
 **Exact changes:**
 - Added `@eslint/js` and set `recommendedConfig: require("@eslint/js").configs.recommended` in `apps/web/eslint.config.js` to avoid relying on non-exported ESLint internal paths.
+- Added `globals` and configured browser/node globals, ignored build output, and disabled `react/prop-types` for TypeScript components.
 
 ## 2026-02-03 — Shared package coverage ignores config files
 
@@ -44,6 +45,7 @@
 **Exact changes:**
 - Added `packages/shared/src/drizzle.ts` re-exporting Drizzle modules.
 - Updated API imports to use `@ccpp/shared/drizzle` so tables and helpers come from the same Drizzle instance.
+- Restricted the shared Drizzle re-exports to `drizzle-orm` and `drizzle-orm/postgres-js` to avoid duplicate export names from `pg-core`.
 
 ## 2026-02-03 — Clerk (auth) + Supabase (DB); single user ID
 

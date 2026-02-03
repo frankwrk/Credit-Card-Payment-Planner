@@ -30,7 +30,6 @@ export function HomeScreen({
   const [onTrackExpanded, setOnTrackExpanded] = useState(false);
 
   const availableCashNum = parseFloat(availableCash) || 0;
-  const activeCards = cards.filter((c) => !c.excludeFromOptimization);
 
   const planActions = useMemo(
     () => generatePlan(cards, availableCashNum, strategy),

@@ -77,8 +77,8 @@ export function ExplanationScreen({ onBack, currentStrategy = 'utilization', onC
               <p className="text-xs text-[#6B6B6B] dark:text-[#9B9B9B] mb-2">Example:</p>
               <p className="text-sm text-[#3F3F3F] dark:text-[#BEBEBE] leading-relaxed">
                 Paying $500 on Feb 4 (before statement close) reduces your reported utilization 
-                from 52% to 32%. The same $500 paid on Feb 12 (after statement close) won't 
-                affect this month's credit report.
+                from 52% to 32%. The same $500 paid on Feb 12 (after statement close) won&apos;t 
+                affect this month&apos;s credit report.
               </p>
             </div>
           </section>
@@ -111,7 +111,7 @@ export function ExplanationScreen({ onBack, currentStrategy = 'utilization', onC
                 <span className="text-[#BEBEBE] dark:text-[#6B6B6B] flex-shrink-0">•</span>
                 <span>
                   <strong className="text-[#1C1C1C] dark:text-[#E4E4E4]">Low utilization cards:</strong> Minimum payments 
-                  only, since they're not hurting your utilization or costing much in interest.
+                  only, since they&apos;re not hurting your utilization or costing much in interest.
                 </span>
               </li>
             </ul>
@@ -127,7 +127,7 @@ export function ExplanationScreen({ onBack, currentStrategy = 'utilization', onC
           </section>
 
           <section>
-            <h3 className="font-medium text-[#1C1C1C] dark:text-[#E4E4E4] mb-3">What this plan doesn't do</h3>
+            <h3 className="font-medium text-[#1C1C1C] dark:text-[#E4E4E4] mb-3">What this plan doesn&apos;t do</h3>
             <ul className="space-y-2 text-sm text-[#3F3F3F] dark:text-[#BEBEBE]">
               <li className="flex gap-2">
                 <span className="text-[#BEBEBE] dark:text-[#6B6B6B] flex-shrink-0">•</span>
