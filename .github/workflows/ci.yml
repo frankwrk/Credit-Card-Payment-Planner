@@ -14,16 +14,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-      - name: Debug toolchain
-        run: |
-          echo "Runner: $RUNNER_OS / $RUNNER_ARCH"
-          node -v
-          corepack --version || true
-          which pnpm || true
-          pnpm --version || true
-          corepack pnpm --version || true
       - run: corepack prepare pnpm@9.0.0 --activate
       - run: corepack pnpm install --frozen-lockfile
       - run: corepack pnpm lint
@@ -35,16 +25,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-      - name: Debug toolchain
-        run: |
-          echo "Runner: $RUNNER_OS / $RUNNER_ARCH"
-          node -v
-          corepack --version || true
-          which pnpm || true
-          pnpm --version || true
-          corepack pnpm --version || true
       - run: corepack prepare pnpm@9.0.0 --activate
       - run: corepack pnpm install --frozen-lockfile
       - run: corepack pnpm typecheck
@@ -56,16 +36,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-      - name: Debug toolchain
-        run: |
-          echo "Runner: $RUNNER_OS / $RUNNER_ARCH"
-          node -v
-          corepack --version || true
-          which pnpm || true
-          pnpm --version || true
-          corepack pnpm --version || true
       - run: corepack prepare pnpm@9.0.0 --activate
       - run: corepack pnpm install --frozen-lockfile
       - run: corepack pnpm test:coverage
@@ -84,16 +54,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-      - name: Debug toolchain
-        run: |
-          echo "Runner: $RUNNER_OS / $RUNNER_ARCH"
-          node -v
-          corepack --version || true
-          which pnpm || true
-          pnpm --version || true
-          corepack pnpm --version || true
       - run: corepack prepare pnpm@9.0.0 --activate
       - run: corepack pnpm install --frozen-lockfile
       - run: corepack pnpm build

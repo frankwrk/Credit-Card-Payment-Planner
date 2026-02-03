@@ -6,7 +6,7 @@
 
 **Exact changes:**
 - Replaced `pnpm/action-setup@v4` with `corepack prepare pnpm@9.0.0 --activate` and invoked pnpm via `corepack pnpm` so no PATH shim is required.
-- Added `cache-dependency-path: pnpm-lock.yaml` to Node setup for consistent pnpm cache restores.
+- Removed `actions/setup-node` pnpm caching because it requires `pnpm` to be on PATH during setup on Blacksmith; rely on Blacksmith transparent cache and/or pnpm install caching instead.
 
 ## 2026-02-03 — CI runners switched to Blacksmith
 
