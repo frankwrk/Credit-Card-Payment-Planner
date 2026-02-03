@@ -8,6 +8,13 @@
 - Replaced `pnpm/action-setup@v4` with `corepack prepare pnpm@9.0.0 --activate` and invoked pnpm via `corepack pnpm` so no PATH shim is required.
 - Added `cache-dependency-path: pnpm-lock.yaml` to Node setup for consistent pnpm cache restores.
 
+## 2026-02-03 — CI runners switched to Blacksmith
+
+**Reason:** Repo moved to the SYNQ-Studio org and CI is now running on Blacksmith runners for consistency with the new org setup.
+
+**Exact changes:**
+- Updated workflow jobs to use `runs-on: blacksmith-2vcpu-ubuntu-2404`.
+
 ## 2026-02-03 — Clerk (auth) + Supabase (DB); single user ID
 
 **Clerk** is the only identity provider. **Supabase** is the database (Postgres). They are separate; there is no Supabase Auth.

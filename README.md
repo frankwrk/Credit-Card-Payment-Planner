@@ -3,6 +3,9 @@
 **Credit Card Payment Planner**
 
 Website: getcycl.com
+Repository: https://github.com/SYNQ-Studio/Cycl
+
+[![CI](https://github.com/SYNQ-Studio/Cycl/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/SYNQ-Studio/Cycl/actions/workflows/ci.yml)
 
 This repo is in Phase 0 scaffolding. The initial UI generated from Figma Make is preserved as a web app under `apps/web`.
 
