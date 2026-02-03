@@ -5,7 +5,7 @@
 **Reason:** GitHub Actions jobs were failing with `Unable to locate executable file: pnpm`. Relying on Corepack keeps pnpm aligned with `packageManager` and avoids PATH issues in CI.
 
 **Exact changes:**
-- Replaced `pnpm/action-setup@v4` with `corepack enable` + `corepack prepare pnpm@9.0.0 --activate`.
+- Replaced `pnpm/action-setup@v4` with `corepack prepare pnpm@9.0.0 --activate` and invoked pnpm via `corepack pnpm` so no PATH shim is required.
 - Added `cache-dependency-path: pnpm-lock.yaml` to Node setup for consistent pnpm cache restores.
 
 ## 2026-02-03 — Clerk (auth) + Supabase (DB); single user ID
