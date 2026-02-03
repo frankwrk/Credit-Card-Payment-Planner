@@ -28,7 +28,7 @@
 **Reason:** CI lint failed with `Missing parameter 'recommendedConfig' in FlatCompat constructor` due to `@eslint/eslintrc@3` requiring `recommendedConfig`.
 
 **Exact changes:**
-- Added `recommendedConfig: require("eslint/conf/eslint-recommended")` to `apps/web/eslint.config.js`.
+- Added `@eslint/js` and set `recommendedConfig: require("@eslint/js").configs.recommended` in `apps/web/eslint.config.js` to avoid relying on non-exported ESLint internal paths.
 
 ## 2026-02-03 — Shared package coverage ignores config files
 
