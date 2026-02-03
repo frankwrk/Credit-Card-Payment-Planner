@@ -54,3 +54,14 @@ These notes document the fixes required to get the Expo prebuild app running on 
      - `sdk.dir=/Users/<you>/Library/Android/sdk`
 3. Run:
    - `pnpm --filter @ccpp/mobile exec expo run:android`
+
+## 2026-02-03 — CI pnpm setup via Corepack
+
+Root cause: GitHub Actions jobs were failing at `pnpm/action-setup@v4`, which prevented `install`, `lint`, `typecheck`, `test`, and `build` from running.
+
+Change applied: `pnpm/action-setup@v4` was removed from `.github/workflows/ci.yml`. Each CI job now runs:
+
+- `corepack enable`
+- `corepack prepare pnpm@9 --activate`
+
+This keeps the pnpm version pinned to 9 while relying on Node 20's built-in Corepack instead of the pnpm action.
