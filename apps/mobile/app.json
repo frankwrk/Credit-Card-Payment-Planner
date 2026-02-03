@@ -1,10 +1,11 @@
 {
   "expo": {
-    "name": "Credit Card Payment Planner",
-    "slug": "credit-card-payment-planner",
+    "name": "Cycl",
+    "slug": "cycl",
     "owner": "synqstudio",
     "version": "0.1.0",
     "orientation": "portrait",
+    "scheme": "cycl",
     "icon": "./assets/icon.png",
     "platforms": [
       "ios",
@@ -14,12 +15,13 @@
       "**/*"
     ],
     "android": {
-      "package": "com.twosix_ltd.creditcardpaymentplanner"
+      "package": "com.getcycl.app"
     },
     "ios": {
-      "bundleIdentifier": "com.twosix-ltd.creditcardpaymentplanner"
+      "bundleIdentifier": "com.getcycl.app"
     },
     "extra": {
+      "domain": "getcycl.com",
       "eas": {
         "projectId": "604aeaea-48c1-4944-b6a1-257067a95ab0"
       }

@@ -10,13 +10,12 @@ Execution order, phases, and engineering constraints are defined in PLANS.md.
 - Title: Product Requirements Document
 - Status: Draft
 - Owner: TBD
-- Last updated: 2026-02-02
+- Last updated: 2026-02-03
 
-## Product Name (Working)
+## Product Name (Canonical)
 
-**Credit Card Payment Planner**
-
-_Working title — branding is explicitly out of scope for MVP._
+**Cycl**  
+_Subtitle: Credit Card Payment Planner_
 
 ---
 

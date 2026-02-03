@@ -5,9 +5,9 @@
 - Title: AI Evaluation Guide
 - Status: Draft
 - Owner: TBD
-- Last updated: 2026-02-02
+- Last updated: 2026-02-03
 
-Credit Card Payment Planner — AI Assistance (Future Versions)
+Cycl (Credit Card Payment Planner) — AI Assistance (Future Versions)
 
 This document defines **golden evaluation cases** and **acceptance checks** for AI features.
 It is designed for:

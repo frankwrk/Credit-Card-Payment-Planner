@@ -8,7 +8,17 @@
 - Last updated: 2026-02-03
 - Current phase: Phase 2
 
-# Credit Card Payment Planner
+# Cycl — Credit Card Payment Planner
+
+## 2026-02-03 — Branding Update (Canonical Identity)
+
+Reason: align all user-facing surfaces and platform identifiers to the canonical product identity.
+
+Exact changes:
+- Product name set to **Cycl** with subtitle **Credit Card Payment Planner**.
+- Canonical domain set to **getcycl.com**.
+- Mobile display name set to **Cycl**; Expo slug/scheme set to **cycl**.
+- iOS/Android bundle and application IDs set to **com.getcycl.app** (internal identifiers otherwise unchanged).
 
 ## Project Principles
 

@@ -7,7 +7,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>Credit Card Payment Planner</string>
+    <string>Cycl</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>$(PRODUCT_NAME)</string>
+    <string>Cycl</string>
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
@@ -25,10 +25,10 @@
     <key>CFBundleURLTypes</key>
     <array>
       <dict>
-        <key>CFBundleURLSchemes</key>
-        <array>
-          <string>com.twosix-ltd.creditcardpaymentplanner</string>
-        </array>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>cycl</string>
+    </array>
       </dict>
     </array>
     <key>CFBundleVersion</key>

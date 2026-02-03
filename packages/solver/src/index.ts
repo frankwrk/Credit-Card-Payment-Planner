@@ -1,5 +1,5 @@
 /**
- * @ccpp/solver – Credit Card Payment Planner solver package.
+ * @ccpp/solver – Cycl (Credit Card Payment Planner) solver package.
  * Main entry point; solver logic will be implemented here.
  */
 

@@ -1,4 +1,4 @@
-package com.twosix_ltd.creditcardpaymentplanner
+package com.getcycl.app
 
 import android.os.Build
 import android.os.Bundle

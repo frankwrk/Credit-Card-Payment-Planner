@@ -1,7 +1,8 @@
 {
-  "name": "credit-card-payment-planner",
+  "name": "cycl",
   "private": true,
   "version": "0.1.0",
+  "description": "Cycl — Credit Card Payment Planner.",
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=18.0.0"

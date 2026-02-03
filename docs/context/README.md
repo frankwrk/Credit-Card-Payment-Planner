@@ -1,11 +1,11 @@
-# Codex Context — Credit Card Payment Planner
+# Codex Context — Cycl (Credit Card Payment Planner)
 
 ## Document Metadata
 
 - Title: Context README
 - Status: Active
 - Owner: TBD
-- Last updated: 2026-02-02
+- Last updated: 2026-02-03
 
 This directory contains the authoritative context for all Codex work on this repo.
 

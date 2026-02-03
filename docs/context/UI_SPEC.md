@@ -1,10 +1,10 @@
-# UI Spec - Credit Card Payment Planner
+# UI Spec - Cycl (Credit Card Payment Planner)
 
 ## Document Metadata
 - Title: UI Specification
 - Status: Draft
 - Owner: TBD
-- Last updated: 2026-02-02
+- Last updated: 2026-02-03
 
 **Scope**
 This spec documents the current UI as implemented in the codebase. It reflects the existing screens, components, copy, and interaction patterns derived from the React components in `apps/web/src/`.

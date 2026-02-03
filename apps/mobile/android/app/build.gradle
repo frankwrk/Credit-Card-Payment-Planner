@@ -87,9 +87,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.twosix_ltd.creditcardpaymentplanner'
+    namespace 'com.getcycl.app'
     defaultConfig {
-        applicationId 'com.twosix_ltd.creditcardpaymentplanner'
+        applicationId 'com.getcycl.app'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
