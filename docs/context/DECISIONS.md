@@ -5,7 +5,8 @@
 **Reason:** GitHub Actions jobs were failing with `Unable to locate executable file: pnpm`. Relying on Corepack keeps pnpm aligned with `packageManager` and avoids PATH issues in CI.
 
 **Exact changes:**
-- Replaced `pnpm/action-setup@v4` with `corepack prepare pnpm@9.0.0 --activate` and invoked pnpm via `corepack pnpm` so no PATH shim is required.
+- Enabled Corepack shims (`corepack enable`) and ensured `$HOME/.local/bin` is on PATH so `pnpm` is available for nested scripts (e.g., root scripts that call `pnpm -r`).
+- Kept `corepack prepare pnpm@9.0.0 --activate` to pin the pnpm version.
 - Removed `actions/setup-node` pnpm caching because it requires `pnpm` to be on PATH during setup on Blacksmith; rely on Blacksmith transparent cache and/or pnpm install caching instead.
 
 ## 2026-02-03 — CI runners switched to Blacksmith

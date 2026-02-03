@@ -14,9 +14,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - run: corepack enable
       - run: corepack prepare pnpm@9.0.0 --activate
-      - run: corepack pnpm install --frozen-lockfile
-      - run: corepack pnpm lint
+      - run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
 
   typecheck:
     runs-on: blacksmith-2vcpu-ubuntu-2404
@@ -25,9 +27,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - run: corepack enable
       - run: corepack prepare pnpm@9.0.0 --activate
-      - run: corepack pnpm install --frozen-lockfile
-      - run: corepack pnpm typecheck
+      - run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
 
   test:
     runs-on: blacksmith-2vcpu-ubuntu-2404
@@ -36,9 +40,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - run: corepack enable
       - run: corepack prepare pnpm@9.0.0 --activate
-      - run: corepack pnpm install --frozen-lockfile
-      - run: corepack pnpm test:coverage
+      - run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:coverage
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -54,6 +60,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - run: corepack enable
       - run: corepack prepare pnpm@9.0.0 --activate
-      - run: corepack pnpm install --frozen-lockfile
-      - run: corepack pnpm build
+      - run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
