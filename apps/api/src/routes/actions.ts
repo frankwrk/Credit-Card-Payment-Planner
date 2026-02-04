@@ -1,6 +1,6 @@
 import { Hono, type Context } from "hono";
 import { and, eq, sql } from "@ccpp/shared/drizzle";
-import { cards as cardsTable, plans as plansTable } from "@ccpp/shared/schema";
+import { schema } from "../dbSchema.js";
 import type { Strategy } from "@ccpp/solver";
 import type { AppEnv, WithRls } from "../types.js";
 import { AppError, ERROR_CODES } from "../errors.js";
@@ -88,8 +88,8 @@ router.post(
 
       const [card] = await tx
         .select()
-        .from(cardsTable)
-        .where(and(eq(cardsTable.id, cardId), eq(cardsTable.userId, userId)))
+        .from(schema.cards)
+        .where(and(eq(schema.cards.id, cardId), eq(schema.cards.userId, userId)))
         .limit(1);
 
       if (!card) {
@@ -103,9 +103,9 @@ router.post(
       const nextBalance = Math.max(0, card.currentBalanceCents - amountCents);
 
       const [updatedCard] = await tx
-        .update(cardsTable)
+        .update(schema.cards)
         .set({ currentBalanceCents: nextBalance, updatedAt: new Date() })
-        .where(and(eq(cardsTable.id, cardId), eq(cardsTable.userId, userId)))
+        .where(and(eq(schema.cards.id, cardId), eq(schema.cards.userId, userId)))
         .returning();
 
       if (!updatedCard) {
@@ -119,13 +119,13 @@ router.post(
       const jsonPath = `{actions,${actionId},markedPaidAt}`;
 
       const [updatedPlan] = await tx
-        .update(plansTable)
+        .update(schema.plans)
         .set({
-          snapshotJson: sql`jsonb_set(${plansTable.snapshotJson}, ${sql.raw(
+          snapshotJson: sql`jsonb_set(${schema.plans.snapshotJson}, ${sql.raw(
             `'${jsonPath}'`
           )}, to_jsonb(NOW()), false)`,
         })
-        .where(eq(plansTable.id, latestPlan.id))
+        .where(eq(schema.plans.id, latestPlan.id))
         .returning();
 
       if (!updatedPlan) {

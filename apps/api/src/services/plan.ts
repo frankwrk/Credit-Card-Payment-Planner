@@ -1,16 +1,7 @@
 import { desc, eq } from "@ccpp/shared/drizzle";
-import {
-  cards as cardsTable,
-  plans as plansTable,
-  planPreferences as planPreferencesTable,
-} from "@ccpp/shared/schema";
+import { schema } from "../dbSchema.js";
 import type { Plan } from "@ccpp/shared/schema";
-import {
-  dbCardToCardMeta,
-  dbPlanToPlanSnapshot,
-  planSnapshotToDbPlan,
-  type PlanSnapshot,
-} from "@ccpp/shared";
+import * as shared from "@ccpp/shared";
 import {
   ConstraintViolationError,
   generatePlan,
@@ -23,7 +14,7 @@ import { AppError, ERROR_CODES, type ErrorDetails } from "../errors.js";
 const SOLVER_TIMEOUT_MS = 500;
 
 export type PlanResponse = {
-  plan: PlanSnapshot;
+  plan: shared.PlanSnapshot;
   strategy: Strategy;
   availableCashCents: number;
   totalPaymentCents: number;
@@ -35,8 +26,8 @@ export async function loadPlanPreferences(
 ) {
   const [preferences] = await tx
     .select()
-    .from(planPreferencesTable)
-    .where(eq(planPreferencesTable.userId, userId))
+    .from(schema.planPreferences)
+    .where(eq(schema.planPreferences.userId, userId))
     .limit(1);
   return preferences ?? null;
 }
@@ -46,7 +37,7 @@ export async function upsertPlanPreferences(
   input: { userId: string; strategy: Strategy; availableCashCents: number }
 ) {
   const [preferences] = await tx
-    .insert(planPreferencesTable)
+    .insert(schema.planPreferences)
     .values({
       userId: input.userId,
       strategy: input.strategy,
@@ -54,7 +45,7 @@ export async function upsertPlanPreferences(
       updatedAt: new Date(),
     })
     .onConflictDoUpdate({
-      target: planPreferencesTable.userId,
+      target: schema.planPreferences.userId,
       set: {
         strategy: input.strategy,
         availableCashCents: input.availableCashCents,
@@ -77,9 +68,9 @@ export async function upsertPlanPreferences(
 export async function fetchLatestPlan(tx: Database, userId: string) {
   const [latest] = await tx
     .select()
-    .from(plansTable)
-    .where(eq(plansTable.userId, userId))
-    .orderBy(desc(plansTable.generatedAt))
+    .from(schema.plans)
+    .where(eq(schema.plans.userId, userId))
+    .orderBy(desc(schema.plans.generatedAt))
     .limit(1);
   return latest ?? null;
 }
@@ -87,15 +78,15 @@ export async function fetchLatestPlan(tx: Database, userId: string) {
 export async function fetchCards(tx: Database, userId: string) {
   return tx
     .select()
-    .from(cardsTable)
-    .where(eq(cardsTable.userId, userId))
-    .orderBy(desc(cardsTable.updatedAt));
+    .from(schema.cards)
+    .where(eq(schema.cards.userId, userId))
+    .orderBy(desc(schema.cards.updatedAt));
 }
 
 function buildSolverCards(cards: Awaited<ReturnType<typeof fetchCards>>): CardMeta[] {
   const activeCards = cards.filter((card) => !card.excludeFromOptimization);
   return activeCards.map((card) => ({
-    ...dbCardToCardMeta(card),
+    ...shared.dbCardToCardMeta(card),
     currentBalanceCents: card.currentBalanceCents,
   }));
 }
@@ -104,9 +95,9 @@ async function generatePlanWithTimeout(
   cards: CardMeta[],
   availableCashCents: number,
   strategy: Strategy
-): Promise<PlanSnapshot> {
+): Promise<shared.PlanSnapshot> {
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
-  const timeoutPromise = new Promise<PlanSnapshot>((_, reject) => {
+  const timeoutPromise = new Promise<shared.PlanSnapshot>((_, reject) => {
     timeoutId = setTimeout(() => {
       reject(
         new AppError({
@@ -143,7 +134,7 @@ export async function generateAndPersistPlan(
   const solverCards = buildSolverCards(cards);
 
   const start = Date.now();
-  let snapshot: PlanSnapshot;
+  let snapshot: shared.PlanSnapshot;
 
   try {
     snapshot = await generatePlanWithTimeout(
@@ -181,14 +172,14 @@ export async function generateAndPersistPlan(
     0
   );
 
-  const newPlan = planSnapshotToDbPlan(snapshot, {
+  const newPlan = shared.planSnapshotToDbPlan(snapshot, {
     userId: input.userId,
     strategy: input.strategy,
     availableCashCents: input.availableCashCents,
     totalPaymentCents,
   });
 
-  const [saved] = await tx.insert(plansTable).values(newPlan).returning();
+  const [saved] = await tx.insert(schema.plans).values(newPlan).returning();
 
   if (!saved) {
     throw new AppError({
@@ -209,7 +200,7 @@ export function formatPlanResponse(
   plan: Plan,
   overrides?: { strategy?: Strategy; availableCashCents?: number; totalPaymentCents?: number }
 ): PlanResponse {
-  const snapshot = dbPlanToPlanSnapshot(plan);
+  const snapshot = shared.dbPlanToPlanSnapshot(plan);
   return {
     plan: snapshot,
     strategy: (overrides?.strategy ?? plan.strategy) as Strategy,

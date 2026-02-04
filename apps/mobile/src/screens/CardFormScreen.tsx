@@ -10,6 +10,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import type { RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { CardInput } from "@ccpp/shared/mobile";
+import { useAuth } from "@clerk/clerk-expo";
 
 import { Button } from "../components/Button";
 import { Field } from "../components/Field";
@@ -49,6 +50,7 @@ export function CardFormScreen() {
   const navigation = useNavigation<CardFormNav>();
   const route = useRoute<CardFormRoute>();
   const cardId = route.params?.cardId;
+  const { getToken } = useAuth();
 
   const [form, setForm] = React.useState<FormState>(emptyForm);
   const [errors, setErrors] = React.useState<FormErrors>({});
@@ -59,20 +61,28 @@ export function CardFormScreen() {
       setForm(emptyForm);
       return;
     }
-    getCard(cardId).then((card) => {
-      if (!card) return;
-      setForm({
-        name: card.name,
-        issuer: card.issuer ?? "",
-        creditLimit: formatCentsPlain(card.creditLimitCents),
-        balance: formatCentsPlain(card.currentBalanceCents),
-        minimumPayment: formatCentsPlain(card.minimumPaymentCents),
-        apr: formatAprBps(card.aprBps),
-        statementCloseDay: String(card.statementCloseDay),
-        dueDateDay: String(card.dueDateDay),
+    getToken()
+      .then((token) => {
+        if (!token) throw new Error("Missing auth token");
+        return getCard(token, cardId);
+      })
+      .then((card) => {
+        if (!card) return;
+        setForm({
+          name: card.name,
+          issuer: card.issuer ?? "",
+          creditLimit: formatCentsPlain(card.creditLimitCents),
+          balance: formatCentsPlain(card.currentBalanceCents),
+          minimumPayment: formatCentsPlain(card.minimumPaymentCents),
+          apr: formatAprBps(card.aprBps),
+          statementCloseDay: String(card.statementCloseDay),
+          dueDateDay: String(card.dueDateDay),
+        });
+      })
+      .catch(() => {
+        setErrors({ name: "Unable to load card." });
       });
-    });
-  }, [cardId]);
+  }, [cardId, getToken]);
 
   const updateField = (field: keyof FormState, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -134,10 +144,15 @@ export function CardFormScreen() {
     }
 
     try {
+      const token = await getToken();
+      if (!token) {
+        setErrors({ name: "Missing auth token." });
+        return;
+      }
       if (cardId) {
-        await updateCard(cardId, parsed.data);
+        await updateCard(token, cardId, parsed.data);
       } else {
-        await createCard(parsed.data);
+        await createCard(token, parsed.data);
       }
       navigation.goBack();
     } catch (error) {
@@ -155,7 +170,12 @@ export function CardFormScreen() {
         text: "Delete",
         style: "destructive",
         onPress: async () => {
-          await deleteCard(cardId);
+          const token = await getToken();
+          if (!token) {
+            Alert.alert("Delete failed", "Missing auth token.");
+            return;
+          }
+          await deleteCard(token, cardId);
           navigation.goBack();
         },
       },

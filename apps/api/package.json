@@ -7,6 +7,9 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
+    "migrate": "node scripts/run-migrations.mjs",
+    "migrate:status": "node scripts/run-migrations.mjs --status",
+    "seed:demo": "node scripts/seed-demo.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "pnpm exec vitest run --passWithNoTests",
     "test:watch": "pnpm exec vitest",
@@ -17,9 +20,11 @@
     "@ccpp/solver": "workspace:*",
     "@clerk/backend": "^1.20.0",
     "@hono/node-server": "^1.12.0",
+    "dotenv": "^16.4.5",
     "drizzle-orm": "^0.31.1",
     "hono": "^4.6.0",
     "postgres": "^3.4.4",
+    "svix": "^1.31.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

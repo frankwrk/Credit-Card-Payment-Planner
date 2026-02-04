@@ -1,6 +1,6 @@
 import { Hono, type Context } from "hono";
 import { and, eq } from "@ccpp/shared/drizzle";
-import { cards as cardsTable } from "@ccpp/shared/schema";
+import { schema } from "../dbSchema.js";
 import type { Strategy } from "@ccpp/solver";
 import type { AppEnv, WithRls } from "../types.js";
 import { AppError, ERROR_CODES } from "../errors.js";
@@ -54,9 +54,9 @@ router.post("/overrides", validateJson(overridesRequestSchema), async (c) => {
     };
 
     const [updated] = await tx
-      .update(cardsTable)
+      .update(schema.cards)
       .set(payload)
-      .where(and(eq(cardsTable.id, cardId), eq(cardsTable.userId, userId)))
+      .where(and(eq(schema.cards.id, cardId), eq(schema.cards.userId, userId)))
       .returning();
 
     if (!updated) {

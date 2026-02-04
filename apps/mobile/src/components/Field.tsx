@@ -7,6 +7,7 @@ type FieldProps = {
   value: string;
   placeholder?: string;
   keyboardType?: "default" | "numeric" | "decimal-pad" | "number-pad";
+  secureTextEntry?: boolean;
   onChangeText: (value: string) => void;
   error?: string;
 };
@@ -16,6 +17,7 @@ export function Field({
   value,
   placeholder,
   keyboardType = "default",
+  secureTextEntry = false,
   onChangeText,
   error,
 }: FieldProps) {
@@ -28,6 +30,7 @@ export function Field({
         onChangeText={onChangeText}
         placeholder={placeholder}
         keyboardType={keyboardType}
+        secureTextEntry={secureTextEntry}
         autoCapitalize="none"
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}

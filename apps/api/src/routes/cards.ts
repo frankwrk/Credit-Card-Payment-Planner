@@ -1,6 +1,6 @@
 import { Hono, type Context } from "hono";
 import { and, desc, eq } from "@ccpp/shared/drizzle";
-import { cards as cardsTable } from "@ccpp/shared/schema";
+import { schema } from "../dbSchema.js";
 import type { AppEnv, WithRls } from "../types.js";
 import { AppError, ERROR_CODES } from "../errors.js";
 import { validateJson, validateParams } from "../middleware/validate.js";
@@ -46,9 +46,9 @@ router.get("/cards", async (c) => {
   const list = await withRls((tx) =>
     tx
       .select()
-      .from(cardsTable)
-      .where(eq(cardsTable.userId, userId))
-      .orderBy(desc(cardsTable.updatedAt))
+      .from(schema.cards)
+      .where(eq(schema.cards.userId, userId))
+      .orderBy(desc(schema.cards.updatedAt))
   );
 
   return c.json(list);
@@ -67,7 +67,7 @@ router.post("/cards", validateJson(createCardSchema), async (c) => {
   };
 
   const [created] = await withRls((tx) =>
-    tx.insert(cardsTable).values(payload).returning()
+    tx.insert(schema.cards).values(payload).returning()
   );
 
   if (!created) {
@@ -100,9 +100,9 @@ router.patch(
 
     const [updated] = await withRls((tx) =>
       tx
-        .update(cardsTable)
+        .update(schema.cards)
         .set(payload)
-        .where(and(eq(cardsTable.id, id), eq(cardsTable.userId, userId)))
+        .where(and(eq(schema.cards.id, id), eq(schema.cards.userId, userId)))
         .returning()
     );
 
@@ -128,8 +128,8 @@ router.delete(
 
     const [deleted] = await withRls((tx) =>
       tx
-        .delete(cardsTable)
-        .where(and(eq(cardsTable.id, id), eq(cardsTable.userId, userId)))
+        .delete(schema.cards)
+        .where(and(eq(schema.cards.id, id), eq(schema.cards.userId, userId)))
         .returning()
     );
 

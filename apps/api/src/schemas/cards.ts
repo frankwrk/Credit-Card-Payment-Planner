@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { selectCardSchema } from "@ccpp/shared/schema";
 
 const dayOfMonth = z.number().int().min(1).max(31);
 const cents = z.number().int().nonnegative();
@@ -26,8 +25,13 @@ export const cardIdParamsSchema = z.object({
   id: z.string().uuid(),
 });
 
-export const cardResponseSchema = selectCardSchema;
-export const cardsResponseSchema = z.array(selectCardSchema);
+export const cardResponseSchema = createCardSchema.extend({
+  id: z.string().uuid(),
+  userId: z.string().min(1),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+export const cardsResponseSchema = z.array(cardResponseSchema);
 
 export type CreateCardInput = z.infer<typeof createCardSchema>;
 export type UpdateCardInput = z.infer<typeof updateCardSchema>;

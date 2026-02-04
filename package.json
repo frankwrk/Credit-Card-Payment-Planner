@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "description": "Cycl — Credit Card Payment Planner.",
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@10.28.2",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -22,12 +22,20 @@
   },
   "pnpm": {
     "ignoredBuiltDependencies": [
+      "@clerk/shared",
       "@swc/core",
-      "esbuild"
+      "browser-tabs-lock",
+      "bufferutil",
+      "core-js",
+      "esbuild",
+      "utf-8-validate"
     ],
+    "overrides": {
+      "bs58": "^6.0.0"
+    },
     "peerDependencyRules": {
       "allowedVersions": {
-        "react": "19.1.0"
+        "react": "19.1.0 || 19.2.3"
       }
     }
   }

@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { AppError, ERROR_CODES } from "./errors.js";
 
 type NodeEnv = "development" | "test" | "production";
@@ -8,6 +9,7 @@ type EnvConfig = {
   CORS_ORIGIN: string;
   CLERK_PUBLISHABLE_KEY: string;
   CLERK_SECRET_KEY: string;
+  CLERK_WEBHOOK_SECRET: string;
   CLERK_JWT_ISSUER?: string;
   CLERK_AUTHORIZED_PARTIES?: string[];
   SUPABASE_DATABASE_URL: string;
@@ -62,6 +64,7 @@ export const env: EnvConfig = {
   CORS_ORIGIN: process.env.CORS_ORIGIN ?? "*",
   CLERK_PUBLISHABLE_KEY: required("CLERK_PUBLISHABLE_KEY"),
   CLERK_SECRET_KEY: required("CLERK_SECRET_KEY"),
+  CLERK_WEBHOOK_SECRET: required("CLERK_WEBHOOK_SECRET"),
   CLERK_JWT_ISSUER: process.env.CLERK_JWT_ISSUER,
   CLERK_AUTHORIZED_PARTIES: process.env.CLERK_AUTHORIZED_PARTIES?.split(",").map((value) => value.trim()).filter(Boolean),
   SUPABASE_DATABASE_URL: required("SUPABASE_DATABASE_URL"),

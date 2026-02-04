@@ -8,14 +8,13 @@ import {
 } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 import type { Strategy, StoredCard } from "@ccpp/shared/mobile";
 import type { PlanAction } from "@ccpp/shared/ai";
-import { ConstraintViolationError } from "@ccpp/solver";
 
 import { listCards } from "../data/cards";
-import { getPlanPreferences, setPlanPreferences } from "../data/preferences";
-import { getLatestPlanSnapshot, savePlanSnapshot } from "../data/planSnapshots";
-import { buildPlanSnapshot } from "../logic/plan";
+import { generatePlan, getCurrentPlan } from "../data/plans";
+import { ApiError } from "../data/api";
 import { Button } from "../components/Button";
 import { Disclaimer } from "../components/Disclaimer";
 import { EmptyState } from "../components/EmptyState";
@@ -30,11 +29,17 @@ import type { RootStackParamList } from "../navigation/types";
 export function PlanScreen() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { getToken } = useAuth();
+  const getTokenRef = React.useRef(getToken);
+  React.useEffect(() => {
+    getTokenRef.current = getToken;
+  }, [getToken]);
+  const { user } = useUser();
   const [cards, setCards] = React.useState<StoredCard[]>([]);
   const [availableCash, setAvailableCash] = React.useState("");
   const [strategy, setStrategy] = React.useState<Strategy>("utilization");
   const [plan, setPlan] = React.useState<Awaited<
-    ReturnType<typeof getLatestPlanSnapshot>
+    ReturnType<typeof getCurrentPlan>
   > | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(true);
@@ -42,11 +47,17 @@ export function PlanScreen() {
 
   const refresh = React.useCallback(() => {
     setLoading(true);
-    Promise.all([listCards(), getPlanPreferences(), getLatestPlanSnapshot()])
-      .then(([cardsData, prefs, latestPlan]) => {
+    getTokenRef.current()
+      .then((token) => {
+        if (!token) throw new Error("Missing auth token");
+        return Promise.all([listCards(token), getCurrentPlan(token)]);
+      })
+      .then(([cardsData, latestPlan]) => {
         setCards(cardsData);
-        setAvailableCash(formatCentsPlain(prefs.availableCashCents));
-        setStrategy(prefs.strategy);
+        if (latestPlan) {
+          setAvailableCash(formatCentsPlain(latestPlan.availableCashCents));
+          setStrategy(latestPlan.strategy);
+        }
         setPlan(latestPlan);
       })
       .finally(() => setLoading(false));
@@ -67,21 +78,27 @@ export function PlanScreen() {
     }
 
     try {
-      const snapshot = buildPlanSnapshot(cards, cashCents, strategy);
-      await setPlanPreferences(cashCents, strategy);
-      await savePlanSnapshot(snapshot);
+      const token = await getToken();
+      if (!token) {
+        setError("Missing auth token.");
+        return;
+      }
+      const snapshot = await generatePlan(token, cashCents, strategy);
       setPlan(snapshot);
     } catch (err: unknown) {
-      if (err instanceof ConstraintViolationError) {
-        const payload = err.getPayload();
-        setError(
-          `Available cash is short by ${formatCurrency(
-            payload.shortfallCents
-          )}. Cover minimums first or reduce cash constraints.`
-        );
-      } else {
-        setError("Plan generation failed. Please try again.");
+      if (err instanceof ApiError && err.code === "SOLVER_CONSTRAINT_VIOLATION") {
+        const shortfallCents = (err.details as { shortfallCents?: number })
+          ?.shortfallCents;
+        if (typeof shortfallCents === "number") {
+          setError(
+            `Available cash is short by ${formatCurrency(
+              shortfallCents
+            )}. Cover minimums first or reduce cash constraints.`
+          );
+          return;
+        }
       }
+      setError("Plan generation failed. Please try again.");
     }
   };
 
@@ -112,6 +129,9 @@ export function PlanScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <Text style={styles.userHeader}>
+        Logged in as {user?.primaryEmailAddress?.emailAddress ?? "Unknown"}
+      </Text>
       <Section title="This Cycle">
         <Field
           label="Available cash this cycle ($)"
@@ -233,6 +253,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.muted,
     lineHeight: 16,
+  },
+  userHeader: {
+    fontSize: 12,
+    color: colors.muted,
+    marginBottom: spacing.md,
   },
   spacer: {
     height: spacing.sm,

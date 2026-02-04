@@ -4,6 +4,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { listCards } from "../data/cards";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 import type { StoredCard } from "@ccpp/shared/mobile";
 import { Button } from "../components/Button";
 import { CardRow } from "../components/CardRow";
@@ -14,6 +15,12 @@ import type { RootStackParamList } from "../navigation/types";
 export function CardsScreen() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { getToken } = useAuth();
+  const getTokenRef = React.useRef(getToken);
+  React.useEffect(() => {
+    getTokenRef.current = getToken;
+  }, [getToken]);
+  const { user } = useUser();
   const [cards, setCards] = React.useState<Awaited<
     ReturnType<typeof listCards>
   >>([]);
@@ -21,7 +28,11 @@ export function CardsScreen() {
 
   const loadCards = React.useCallback(() => {
     setLoading(true);
-    listCards()
+    getTokenRef.current()
+      .then((token) => {
+        if (!token) throw new Error("Missing auth token");
+        return listCards(token);
+      })
       .then((data) => setCards(data))
       .finally(() => setLoading(false));
   }, []);
@@ -63,6 +74,9 @@ export function CardsScreen() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.userHeader}>
+        Logged in as {user?.primaryEmailAddress?.emailAddress ?? "Unknown"}
+      </Text>
       {loading ? <Text style={styles.muted}>Loading cards...</Text> : null}
       <FlatList<StoredCard>
         data={cards}
@@ -89,6 +103,11 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingBottom: spacing.lg,
+  },
+  userHeader: {
+    fontSize: 12,
+    color: colors.muted,
+    marginBottom: spacing.sm,
   },
   muted: {
     color: colors.muted,

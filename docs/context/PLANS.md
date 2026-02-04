@@ -77,13 +77,12 @@ README.md
 
 ### Mobile
 
-- TanStack Query
-- Invalidate on override save, refresh, foreground
+- API-backed reads/writes (no local persistence for cards/plans)
+- Refresh on screen focus or manual action
 
 ### Local
 
-- SQLite: history
-- App Group: latest snapshot
+- Deferred (offline support to be reintroduced later)
 
 ### Server
 

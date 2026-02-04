@@ -1,8 +1,9 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { useAuth } from "@clerk/clerk-expo";
 
-import { getLatestPlanSnapshot } from "../data/planSnapshots";
+import { getCurrentPlan } from "../data/plans";
 import { Disclaimer } from "../components/Disclaimer";
 import { EmptyState } from "../components/EmptyState";
 import { Section } from "../components/Section";
@@ -11,12 +12,23 @@ import { formatCurrency } from "../utils/format";
 
 export function WhyPlanScreen() {
   const [plan, setPlan] = React.useState<Awaited<
-    ReturnType<typeof getLatestPlanSnapshot>
+    ReturnType<typeof getCurrentPlan>
   > | null>(null);
+  const { getToken } = useAuth();
+  const getTokenRef = React.useRef(getToken);
+  React.useEffect(() => {
+    getTokenRef.current = getToken;
+  }, [getToken]);
 
   useFocusEffect(
     React.useCallback(() => {
-      getLatestPlanSnapshot().then(setPlan);
+      getTokenRef.current()
+        .then((token) => {
+          if (!token) throw new Error("Missing auth token");
+          return getCurrentPlan(token);
+        })
+        .then(setPlan)
+        .catch(() => setPlan(null));
     }, [])
   );
 

@@ -11,6 +11,9 @@ import cardsRoutes from "./routes/cards.js";
 import plansRoutes from "./routes/plans.js";
 import actionsRoutes from "./routes/actions.js";
 import overridesRoutes from "./routes/overrides.js";
+import webhooksRoutes from "./routes/webhooks.js";
+import usersRoutes from "./routes/users.js";
+import debugRoutes from "./routes/debug.js";
 
 const app = new Hono<AppEnv>();
 
@@ -31,11 +34,15 @@ app.use("*", dbMiddleware);
 
 app.get("/health", (c) => c.json({ status: "ok" }));
 
+app.route("/", webhooksRoutes);
+
 app.use("/api/*", authMiddleware);
 app.route("/api", cardsRoutes);
 app.route("/api", plansRoutes);
 app.route("/api", actionsRoutes);
 app.route("/api", overridesRoutes);
+app.route("/api", usersRoutes);
+app.route("/api", debugRoutes);
 
 app.notFound(notFoundHandler);
 
